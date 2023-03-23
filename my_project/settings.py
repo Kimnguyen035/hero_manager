@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,7 +26,7 @@ SECRET_KEY = 'django-insecure-9g^3s4a5r-mz4-rx@&njb#_h9f^zgen-7!akz6=edp_osh6bbj
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -37,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'my_app',
 ]
 
 MIDDLEWARE = [
@@ -49,7 +52,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'my_project.urls'
+ROOT_URLCONF = 'my_app.urls'
 
 TEMPLATES = [
     {
@@ -74,10 +77,62 @@ WSGI_APPLICATION = 'my_project.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    # },
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': config('MYSQL_DATABASE_DB'),
+        'USER': config('MYSQL_DATABASE_USER'),
+        'PASSWORD': config('MYSQL_DATABASE_PASSWORD'),
+        'HOST': config('MYSQL_DATABASE_HOST'),
+        'PORT': config('MYSQL_DATABASE_PORT'),
     }
+}
+
+DATE_FORMAT = '%d-%m-%Y'
+
+DATETIME_FORMAT = '%d-%m-%Y %H:%M:%S'
+
+DATE_INPUT_FORMATS = [
+    '%d/%m/%Y',
+    '%Y-%m-%d',
+    '%d-%m-%Y',
+    '%Y/%m/%d'
+]
+
+DATETIME_INPUT_FORMATS = [
+    '%Y-%m-%d %H:%M:%S',
+    '%Y/%m/%d %H:%M:%S',
+    '%d-%m-%Y %H:%M:%S',
+    '%d/%m/%Y %H:%M:%S'
+]
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DATE_FORMAT': DATE_FORMAT,
+    'DATETIME_FORMAT': DATETIME_FORMAT,
+    'DATE_INPUT_FORMATS': DATE_INPUT_FORMATS,
+    'DATETIME_INPUT_FORMATS': DATETIME_INPUT_FORMATS,
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ],
+    'DEFAULT_PARSER_CLASSES': [
+        'rest_framework.parsers.JSONParser',
+        'rest_framework.parsers.MultiPartParser',
+        'rest_framework.parsers.FormParser'
+    ],
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json',
+    #  'DEFAULT_THROTTLE_CLASSES': [
+    #     'my_project.throttling.UserThrottle'
+    # ],
+    # 'DEFAULT_THROTTLE_RATES': {
+    #     'user':'1/second'
+    # },
+    # 'EXCEPTION_HANDLER': 'my_project.throttling.custom_exception_handler'
 }
 
 
@@ -105,11 +160,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Ho_Chi_Minh'
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -121,3 +176,12 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REDIS_HOST_CENTRALIZED = config("CENTRALIZED_SESSION_REDIS_HOST")
+REDIS_PORT_CENTRALIZED = int(config("CENTRALIZED_SESSION_REDIS_PORT"))
+REDIS_PASSWORD_CENTRALIZED = config("CENTRALIZED_SESSION_REDIS_PASSWORD")
+REDIS_DATABASE_CENTRALIZED = int(config("CENTRALIZED_SESSION_REDIS_DATABASE"))
+REDIS_DATABASE_SERVICE_CHECKIN = int(config("SERVICE_CHECKIN_REDIS_DATABASE"))
+
+
+APP_ENVIRONMENT = config("APP_ENV")
