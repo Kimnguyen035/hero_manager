@@ -5,7 +5,7 @@ from math import ceil
 
 def response_data(data=None, status=1, message="Success"):
     result = {
-        'status_code': status,
+        'statusCode': status,
         'message': message,
         'data': data
     }
@@ -13,7 +13,7 @@ def response_data(data=None, status=1, message="Success"):
 
 def json_response(data=None, status=1, message="Success"):
     result = {
-        'status_code': status,
+        'statusCode': status,
         'message': message,
         'data': data
     }
