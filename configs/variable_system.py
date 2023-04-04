@@ -29,3 +29,9 @@ THROTTLING = {
 DATABASE_TB = {
     'HERO_TB': 'hero'
 }
+
+DETAIL_HERO = {
+    'id': 'Code',
+    'name': 'Name',
+    'power': 'Power'
+}
