@@ -6,8 +6,8 @@ class Hero(models.Model):
         db_table = vr_sys.DATABASE_TB['HERO_TB']
     
     id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=50)
-    power = models.CharField(max_length=50)
+    name = models.CharField(max_length=255)
+    power = models.CharField(max_length=255)
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
